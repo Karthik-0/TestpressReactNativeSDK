@@ -18,4 +18,14 @@ buildscript {
     }
 }
 
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            url "https://github.com/testpress/maven/raw/main/repo"
+        }
+    }
+}
+
 apply plugin: "com.facebook.react.rootproject"
