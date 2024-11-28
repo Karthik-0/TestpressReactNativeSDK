@@ -1,8 +1,11 @@
 package com.testpressreactnativesdk
 
+import android.util.Log
 import com.facebook.react.uimanager.SimpleViewManager
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
+import com.testpressreactnativesdk.TPStreamPlayerView
+import com.facebook.react.bridge.ReactMethod
 
 class TPStreamPlayerManager : SimpleViewManager<TPStreamPlayerView>() {
 
@@ -14,11 +17,21 @@ class TPStreamPlayerManager : SimpleViewManager<TPStreamPlayerView>() {
 
     @ReactProp(name = "videoId")
     fun setVideoId(view: TPStreamPlayerView, videoId: String) {
-        view.initializePlayer(videoId, view.accessToken) // Ensure `accessToken` is set before calling.
+        view.videoId = videoId
     }
 
     @ReactProp(name = "accessToken")
     fun setAccessToken(view: TPStreamPlayerView, accessToken: String) {
         view.accessToken = accessToken
+    }
+
+    @ReactMethod
+    fun play(view: TPStreamPlayerView) {
+        // Initialize player only when both videoId and accessToken are available
+        if (view.videoId.isNotEmpty() && view.accessToken.isNotEmpty()) {
+            view.initializePlayer()
+        } else {
+            Log.e("TPStreamPlayerManager", "Cannot initialize player: videoId or accessToken is missing")
+        }
     }
 }
